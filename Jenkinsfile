@@ -3,6 +3,7 @@ pipeline {
     agent any
 
     environment {
+        
 
         ENVIRONMENT = "${env.BRANCH_NAME}"
 
