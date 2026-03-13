@@ -3,7 +3,7 @@ pipeline {
     agent any
 
     environment {
-        
+
 
         ENVIRONMENT = "${env.BRANCH_NAME}"
 
@@ -44,17 +44,20 @@ pipeline {
         */
 
         stage('Load Pipeline Config') {
-
             steps {
+                script {
 
-                sh '''
-                chmod +x scripts/load-env.sh
-                source scripts/load-env.sh
-                '''
+                    def props = readProperties file: 'config/pipeline.env'
 
+                    props.each { key, value ->
+                        env[key] = value
+                    }
+
+                    echo "Pipeline configuration loaded"
+
+                }
             }
-
-        }
+    }
 
         stage('Verify Variables') {
 
