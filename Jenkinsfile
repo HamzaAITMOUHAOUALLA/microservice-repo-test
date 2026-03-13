@@ -181,6 +181,7 @@ pipeline {
 
                 docker run -d \
                   --name ${CONTAINER_NAME} \
+                  --network ci-network \
                   -p ${STAGING_PORT}:8080 \
                   ${HARBOR_REGISTRY}/${HARBOR_PROJECT}/${IMAGE_NAME}:staging
                 '''
