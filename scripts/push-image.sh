@@ -6,4 +6,4 @@ TAG=$1
 
 echo "Pushing image to Harbor..."
 
-docker push ${IMAGE_NAME}:${TAG}
+#docker push ${IMAGE_NAME}:${TAG}
