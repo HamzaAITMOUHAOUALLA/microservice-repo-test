@@ -58,6 +58,13 @@ pipeline {
                 }
             }
     }
+    stage('Test Env') {
+        steps {
+            sh '''
+            echo "IMAGE_NAME = $IMAGE_NAME"
+            '''
+        }
+    }
 
         stage('Verify Variables') {
 
