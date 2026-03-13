@@ -2,44 +2,28 @@
 
 set -e
 
-: "${CONTAINER_NAME:?CONTAINER_NAME not set}"
-: "${STAGING_PORT:?STAGING_PORT not set}"
+IMAGE_TAG=$1
+ENVIRONMENT=$2
 
-BASE_URL="http://${CONTAINER_NAME}:8080/api/files"
+echo "Cloning GitOps repository..."
+rm -rf gitops-K8S
+rm -rf gitops
+rm -rf gitops-repo
 
-echo "Waiting for application..."
+git clone https://${GIT_USER}:${GIT_PASS}@${GITOPS_REPO} gitops
 
-for i in $(seq 1 20)
-do
-  if curl -s ${BASE_URL} > /dev/null; then
-    echo "Application ready"
-    break
-  fi
-  sleep 5
-done
+cd gitops/${ENVIRONMENT}/${IMAGE_NAME}
 
-if ! curl -s ${BASE_URL} > /dev/null; then
-  echo "Application did not start"
-  exit 1
-fi
+echo "Updating image tag..."
 
-echo "Test file" > sample.txt
+sed -i "s|image:.*|image: ${IMAGE_NAME}:${IMAGE_TAG}|g" deployment.yaml
 
-curl -s -F "file=@sample.txt" \
-     ${BASE_URL}/upload \
-     -o upload.json
+git config user.name "jenkins-bot"
+git config user.email "jenkins@company.com"
 
-FILE_ID=$(jq -r '.fileId' upload.json)
+git add deployment.yaml
+git commit -m "Deploy ${IMAGE_NAME}:${IMAGE_TAG} to ${ENVIRONMENT}"
 
-if [ -z "$FILE_ID" ] || [ "$FILE_ID" = "null" ]; then
-  echo "Upload failed"
-  exit 1
-fi
+git push
 
-curl -s -X POST ${BASE_URL}/process/$FILE_ID
-
-curl -s -o result.zip ${BASE_URL}/download/$FILE_ID
-
-unzip -t result.zip
-
-echo "E2E SUCCESS"
+echo "GitOps updated"
