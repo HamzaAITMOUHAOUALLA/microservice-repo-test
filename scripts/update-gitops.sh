@@ -6,13 +6,16 @@ IMAGE_TAG=$1
 ENVIRONMENT=$2
 
 echo "Cloning GitOps repository..."
-rm -rf gitops-K8S
 rm -rf gitops
-rm -rf gitops-repo
 
 git clone https://${GIT_USER}:${GIT_PASS}@${GITOPS_REPO} gitops
 
-cd gitops/${ENVIRONMENT}/${IMAGE_NAME}
+cd gitops
+
+echo "Checkout branch ${ENVIRONMENT}..."
+git checkout ${ENVIRONMENT} || git checkout -b ${ENVIRONMENT}
+
+cd ${IMAGE_NAME}
 
 echo "Updating image tag..."
 
@@ -24,6 +27,6 @@ git config user.email "jenkins@company.com"
 git add deployment.yaml
 git commit -m "Deploy ${IMAGE_NAME}:${IMAGE_TAG} to ${ENVIRONMENT}"
 
-git push
+git push origin ${ENVIRONMENT}
 
 echo "GitOps updated"
