@@ -19,30 +19,6 @@ pipeline {
 
         }
 
-        /*
-        stage('Skip Bot Commit') {
-
-            steps {
-
-                script {
-
-                    def author = sh(
-                        script: "git log -1 --pretty=%an",
-                        returnStdout: true
-                    ).trim()
-
-                    if (author == "Jenkins CI") {
-                        currentBuild.result = 'NOT_BUILT'
-                        error("Build triggered by Jenkins bot")
-                    }
-
-                }
-
-            }
-
-        }
-        */
-
         stage('Load Pipeline Config') {
             steps {
                 script {
