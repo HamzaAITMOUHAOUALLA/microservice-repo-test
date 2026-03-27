@@ -8,15 +8,7 @@ pipeline {
         ENVIRONMENT = "${env.BRANCH_NAME}"
 
     }
-
     stages {
-
-        stage('Checkout Source') {
-
-            steps {
-                checkout scm
-            }
-        }
         stage('Validate Branch') {
             steps {
                 script {
@@ -28,6 +20,12 @@ pipeline {
 
                     echo "✅ Branch '${env.BRANCH_NAME}' is valid"
                 }
+            }
+        }
+         stage('Checkout Source') {
+
+            steps {
+                checkout scm
             }
         }
 
