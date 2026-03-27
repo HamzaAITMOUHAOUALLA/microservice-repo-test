@@ -16,7 +16,19 @@ pipeline {
             steps {
                 checkout scm
             }
+        }
+        stage('Validate Branch') {
+            steps {
+                script {
+                    def allowedBranches = ['dev', 'staging', 'prod']
 
+                    if (!allowedBranches.contains(env.BRANCH_NAME)) {
+                        error "❌ Branch '${env.BRANCH_NAME}' is not allowed. Only dev/staging/prod are permitted."
+                    }
+
+                    echo "✅ Branch '${env.BRANCH_NAME}' is valid"
+                }
+            }
         }
 
         stage('Load Pipeline Config') {
