@@ -23,12 +23,6 @@ pipeline {
             }
         }
 
-        /* stage('Checkout Source') {
-            steps {
-                checkout scm
-            }
-        }*/
-
         stage('Load Pipeline Config') {
             steps {
                 script {
@@ -42,15 +36,7 @@ pipeline {
                 }
             }
         }
-
-        stage('Test Env') {
-        steps {
-            sh '''
-            echo "IMAGE_NAME = $IMAGE_NAME"
-            '''
-            }
-        }
-
+        
         stage('Verify Variables') {
             steps {
                 sh '''
