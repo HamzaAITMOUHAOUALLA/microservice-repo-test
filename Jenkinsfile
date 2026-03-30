@@ -23,11 +23,11 @@ pipeline {
             }
         }
 
-         stage('Checkout Source') {
+        /* stage('Checkout Source') {
             steps {
                 checkout scm
             }
-        }
+        }*/
 
         stage('Load Pipeline Config') {
             steps {
