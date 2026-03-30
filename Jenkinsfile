@@ -121,7 +121,7 @@ pipeline {
         stage('Build Staging Image') {
             steps {
                 sh '''
-                
+                chmod +x scripts/build-image.sh
                 scripts/build-image.sh staging
                 '''
             }
