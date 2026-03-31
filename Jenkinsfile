@@ -81,7 +81,7 @@ pipeline {
                 }
 
                 stage('SonarQube Analysis') {
-                    /*
+                    
                     steps {
                         withSonarQubeEnv('SonarQubeServer') {
                             withCredentials([
@@ -96,10 +96,10 @@ pipeline {
                             }
                         }
                     }
-                    */
-                    steps {
+                    
+                    /*steps {
                         sh 'echo "sonarqube analysis"'
-                    }
+                    }*/
                 }
             }
         }
