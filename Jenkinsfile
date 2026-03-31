@@ -80,29 +80,32 @@ pipeline {
                     }
                 }
 
-                stage('SonarQube Analysis') {
-                    
-                    steps {
-                        withSonarQubeEnv('SonarQubeServer') {
-                            withCredentials([
-                                string(
-                                    credentialsId: 'jenkinstoken',
-                                    variable: 'SONAR_TOKEN'
-                                )
-                            ]) {
-                                sh '''
-                                mvn sonar:sonar -Dsonar.login=$SONAR_TOKEN
-                                '''
-                            }
-                        }
-                    }
-                    
-                    /*steps {
-                        sh 'echo "sonarqube analysis"'
-                    }*/
+         stage('SonarQube Analysis') {
+    steps {
+        withSonarQubeEnv('SonarQubeServer') {
+            withCredentials([
+                string(credentialsId: 'jenkinstoken', variable: 'SONAR_TOKEN')
+            ]) {
+                sh 'mvn sonar:sonar -Dsonar.login=$SONAR_TOKEN'
+            }
+        }
+    }
+}
+            }
+        }
+        stage('Quality Gate') {
+    steps {
+        script {
+            timeout(time: 5, unit: 'MINUTES') {
+                def qg = waitForQualityGate()
+                
+                if (qg.status != 'OK') {
+                    error "Pipeline failed due to Quality Gate: ${qg.status}"
                 }
             }
         }
+    }
+}
 
         stage('Build Staging Image') {
             steps {
