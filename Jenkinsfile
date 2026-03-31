@@ -146,8 +146,8 @@ pipeline {
                     }
                 }
 
-                /*stage('E2E Tests') {
-                    steps {
+                stage('E2E Tests') {
+                   /* steps {
                         sh '''
                         chmod +x scripts/e2e-test.sh
                         scripts/e2e-test.sh
