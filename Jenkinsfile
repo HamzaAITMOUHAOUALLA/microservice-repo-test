@@ -147,15 +147,15 @@ pipeline {
                 }
 
                 stage('E2E Tests') {
-                    steps {
+                   /* steps {
                         sh '''
                         chmod +x scripts/e2e-test.sh
                         scripts/e2e-test.sh
                         '''
-                    } 
-                    /*steps {
+                    } */
+                    steps {
                     sh 'echo "test E2E"'
-                    }*/
+                    }
                 }
             }
         }
