@@ -49,31 +49,13 @@ stage('Load Pipeline Config') {
             }
         }
 
-          stage('Deploy Image test') {
-            steps {
-                withCredentials([usernamePassword(
-                    credentialsId: 'git-credentials',
-                    usernameVariable: 'GIT_USER',
-                    passwordVariable: 'GIT_PASS'
-                )]) {
-                    sh '''
-                    chmod +x scripts/update-gitops.sh
-                    scripts/update-gitops.sh ${IMAGE_TAG} ${ENVIRONMENT}
-                    '''
-                }
-            }
-        }
 
 
 
 stage('Verify Tools') {
     steps {
         sh '''
-        echo "🔍 Checking Docker..."
-        if ! command -v docker >/dev/null 2>&1; then
-          echo "❌ Docker is NOT installed"
-          exit 1
-        fi
+       
 
         docker --version || { echo "❌ Docker not working"; exit 1; }
 
