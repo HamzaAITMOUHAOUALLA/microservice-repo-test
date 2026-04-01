@@ -49,7 +49,7 @@ stage('Load Pipeline Config') {
             }
         }
 
-  stage('Deploy Image') {
+          stage('Deploy Image') {
             steps {
                 withCredentials([usernamePassword(
                     credentialsId: 'git-credentials',
@@ -63,6 +63,8 @@ stage('Load Pipeline Config') {
                 }
             }
         }
+
+
 
 stage('Verify Tools') {
     steps {
