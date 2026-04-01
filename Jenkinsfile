@@ -92,9 +92,16 @@ stage('Verify Tools') {
         '''
     }
 }
-                stage('Build') {
+          stage('Build') {
             steps {
-                sh './mvnw clean package -DskipTests'
+                sh '''
+                if [ -f mvnw ]; then
+                  chmod +x mvnw
+                  ./mvnw clean package -DskipTests
+                else
+                  mvn clean package -DskipTests
+                fi
+                '''
             }
         }
 
