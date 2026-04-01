@@ -49,6 +49,20 @@ stage('Load Pipeline Config') {
             }
         }
 
+  stage('Deploy Image') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'git-credentials',
+                    usernameVariable: 'GIT_USER',
+                    passwordVariable: 'GIT_PASS'
+                )]) {
+                    sh '''
+                    chmod +x scripts/update-gitops.sh
+                    scripts/update-gitops.sh ${IMAGE_TAG} ${ENVIRONMENT}
+                    '''
+                }
+            }
+        }
 
 stage('Verify Tools') {
     steps {
