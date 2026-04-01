@@ -49,16 +49,11 @@ stage('Load Pipeline Config') {
             }
         }
 
-            stage('Build') {
-                agent {
-                    docker {
-                        image 'maven:3.9.6-eclipse-temurin-17'
-                    }
-                }
-                steps {
-                    sh 'mvn clean package -DskipTests'
-                }
+                stage('Build') {
+            steps {
+                sh './mvnw clean package -DskipTests'
             }
+        }
 
         stage('Unit Test & Quality Checks') {
 
