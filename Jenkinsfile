@@ -50,29 +50,14 @@ stage('Load Pipeline Config') {
         }
 
 
-stage('Verify Tools') {
+stage('Check Versions') {
     steps {
         sh '''
-        echo "🔍 Checking Docker..."
-        if ! command -v docker >/dev/null 2>&1; then
-          echo "❌ Docker is NOT installed"
-          exit 1
-        fi
+        echo "🔍 Docker version:"
+        docker --version
 
-        docker --version || { echo "❌ Docker not working"; exit 1; }
-
-        echo "🔍 Checking Maven..."
-        if command -v mvn >/dev/null 2>&1; then
-          mvn -v || { echo "❌ Maven not working"; exit 1; }
-        elif [ -f mvnw ]; then
-          chmod +x mvnw
-          ./mvnw -v || { echo "❌ Maven wrapper not working"; exit 1; }
-        else
-          echo "❌ Maven not found"
-          exit 1
-        fi
-
-        echo "✅ All tools are available"
+        echo "🔍 Maven version:"
+        mvn -v || ./mvnw -v
         '''
     }
 }
