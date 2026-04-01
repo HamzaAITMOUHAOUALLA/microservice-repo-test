@@ -23,19 +23,20 @@ pipeline {
             }
         }
 
-        stage('Load Pipeline Config') {
-            steps {
-                script {
+stage('Load Pipeline Config') {
+    steps {
+        script {
+            def props = readProperties file: 'config/pipeline.env'
 
-                    def props = readProperties file: 'config/pipeline.env'
-
-                    props.each { key, value ->
-                        env[key] = value
-                    }
-                    echo "Pipeline configuration loaded"
-                }
+            props.each { key, value ->
+                sh "export ${key}=${value}"
+                env."${key}" = value
             }
+
+            echo "Pipeline configuration loaded"
         }
+    }
+}
         
         stage('Verify Variables') {
             steps {
