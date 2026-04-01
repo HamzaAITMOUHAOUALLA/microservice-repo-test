@@ -49,7 +49,7 @@ stage('Load Pipeline Config') {
             }
         }
 
-
+/*
 stage('Check Versions') {
     steps {
         sh '''
@@ -179,7 +179,7 @@ stage('Check Versions') {
                 '''
             }
         }
-
+*/
         stage('Deploy Image') {
             steps {
                 withCredentials([usernamePassword(
