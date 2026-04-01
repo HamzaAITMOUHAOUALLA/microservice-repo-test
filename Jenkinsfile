@@ -216,3 +216,4 @@ stage('Verify Tools') {
             sh 'docker logout || true'
         }
     }
+}
