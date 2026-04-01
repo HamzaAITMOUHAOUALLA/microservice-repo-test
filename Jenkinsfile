@@ -37,7 +37,7 @@ stage('Load Pipeline Config') {
         }
     }
 }
-        
+
         stage('Verify Variables') {
             steps {
                 sh '''
@@ -49,30 +49,30 @@ stage('Load Pipeline Config') {
             }
         }
 
-         stage('Deploy Image') {
-            steps {
-                withCredentials([usernamePassword(
-                    credentialsId: 'git-credentials',
-                    usernameVariable: 'GIT_USER',
-                    passwordVariable: 'GIT_PASS'
-                )]) {
-                    sh '''
-                    chmod +x scripts/update-gitops.sh
-                    scripts/update-gitops.sh ${IMAGE_TAG} ${ENVIRONMENT}
-                    '''
-                }
-            }
-        }
 
-
-stage('Check Versions') {
+stage('Verify Tools') {
     steps {
         sh '''
-        echo "🔍 Docker version:"
-        docker --version
+        echo "🔍 Checking Docker..."
+        if ! command -v docker >/dev/null 2>&1; then
+          echo "❌ Docker is NOT installed"
+          exit 1
+        fi
 
-        echo "🔍 Maven version:"
-        mvn -v || ./mvnw -v
+        docker --version || { echo "❌ Docker not working"; exit 1; }
+
+        echo "🔍 Checking Maven..."
+        if command -v mvn >/dev/null 2>&1; then
+          mvn -v || { echo "❌ Maven not working"; exit 1; }
+        elif [ -f mvnw ]; then
+          chmod +x mvnw
+          ./mvnw -v || { echo "❌ Maven wrapper not working"; exit 1; }
+        else
+          echo "❌ Maven not found"
+          exit 1
+        fi
+
+        echo "✅ All tools are available"
         '''
     }
 }
@@ -119,7 +119,7 @@ stage('Check Versions') {
         script {
             timeout(time: 5, unit: 'MINUTES') {
                 def qg = waitForQualityGate()
-                
+
                 if (qg.status != 'OK') {
                     error "Pipeline failed due to Quality Gate: ${qg.status}"
                 }
@@ -216,4 +216,3 @@ stage('Check Versions') {
             sh 'docker logout || true'
         }
     }
-}
