@@ -79,46 +79,8 @@ stage('Build with Docker') {
     }
 }
 
-stage('Verify Tools') {
-    steps {
-        sh '''
-       
-
-        docker --version || { echo "❌ Docker not working"; exit 1; }
-
-    
-        '''
-    }
-}
 
 
-            stage('Debug Docker Mount') {
-    steps {
-        sh '''
-        docker ps
-        echo "WORKSPACE=$WORKSPACE"
-        docker run --rm -v $WORKSPACE:/app alpine ls -la /app
-        '''
-    }
-}
-
- stage('Build') {
-    steps {
-        sh '''
-        
-echo "HOST:"
-ls -la /home/jenkins/agent/workspace/Hamza_microservice-repo-test_dev
-
-echo "PWD:"
-ls -la $(pwd)
-        docker run --rm \
-        -v $(pwd):/app \
-        -w /app \
-        maven:3.9.6-eclipse-temurin-17 \
-        mvn clean package -DskipTests
-        '''
-    }
-}
 
         stage('Unit Test & Quality Checks') {
 
