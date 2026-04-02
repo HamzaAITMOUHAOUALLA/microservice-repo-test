@@ -74,15 +74,16 @@ stage('Verify Tools') {
     }
 }
          stage('Build') {
-            agent {
-                docker {
-                    image 'maven:3.9.6-eclipse-temurin-17'
-                }
-            }
-            steps {
-                sh 'mvn clean package -DskipTests'
-            }
-        }
+    steps {
+        sh '''
+        docker run --rm \
+        -v $WORKSPACE:/app \
+        -w /app \
+        maven:3.9.6-eclipse-temurin-17 \
+        mvn clean package -DskipTests
+        '''
+    }
+}
 
         stage('Unit Test & Quality Checks') {
 
