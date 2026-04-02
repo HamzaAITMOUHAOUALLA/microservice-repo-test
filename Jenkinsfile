@@ -13,16 +13,7 @@ pipeline {
                 checkout scm
             }
         }
-   stage('Debug Agent') {
-    steps {
-        sh '''
-        echo "Node name: $NODE_NAME"
-        echo "Labels: $NODE_LABELS"
-        '''
-    }
-    }
-
-
+  
         stage('Validate Branch') {
             steps {
                 script {
@@ -38,7 +29,7 @@ pipeline {
         }
 
     stage('Load Pipeline Config') {
-    steps {
+      steps {
         script {
             def props = readProperties file: 'config/pipeline.env'
 
@@ -49,9 +40,9 @@ pipeline {
 
             echo "Pipeline configuration loaded"
         }
+     }
     }
-    }
-
+    
         stage('Verify Variables') {
             steps {
                 sh '''
@@ -82,16 +73,7 @@ pipeline {
     }
     }
 
-      stage('Build') {
-            agent {
-                docker {
-                    image 'maven:3.9.6-eclipse-temurin-17'
-                }
-            }
-            steps {
-                sh 'mvn clean package -DskipTests '
-            }
-        }
+      
         stage('Build with Docker') {
             steps {
                 sh '''
