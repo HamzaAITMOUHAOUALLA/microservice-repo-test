@@ -69,11 +69,12 @@ stage('Build with Docker') {
     agent { label 'agent-1' }
     steps {
         sh '''
-        tar --exclude=app.tar.gz -czf app.tar.gz .
-
-        docker run --rm -i maven:3.9.6-eclipse-temurin-17 bash -c "
+        tar -czf - . | docker run --rm -i \
+        --dns 8.8.8.8 \
+        --dns 1.1.1.1 \
+        maven:3.9.6-eclipse-temurin-17 bash -c "
         mkdir /app && tar -xzf - -C /app && cd /app && mvn clean package -DskipTests
-        " < app.tar.gz
+        "
         '''
     }
 }
