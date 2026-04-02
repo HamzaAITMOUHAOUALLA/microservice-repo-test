@@ -105,18 +105,22 @@ pipeline {
         }
 
 stage('SonarQube Analysis') {
-    agent {
-        docker {
-            image 'maven:3.9.6-eclipse-temurin-17'
-        }
-    }
     steps {
-        withSonarQubeEnv('SonarQubeServer') {
-            withCredentials([
-                string(credentialsId: 'jenkinstoken', variable: 'SONAR_TOKEN')
-            ]) {
-                sh 'mvn sonar:sonar -Dsonar.login=$SONAR_TOKEN'
-            }
+        withCredentials([
+            string(credentialsId: 'jenkinstoken', variable: 'SONAR_TOKEN')
+        ]) {
+            sh '''
+            tar -czf - . | docker run --rm -i \
+            --dns 8.8.8.8 \
+            --dns 1.1.1.1 \
+            maven:3.9.6-eclipse-temurin-17 bash -c "
+            mkdir /app && tar -xzf - -C /app && cd /app && \
+            mvn sonar:sonar \
+              -Dsonar.projectKey=data-demo-api \
+              -Dsonar.host.url=http://SONAR_URL:9000 \
+              -Dsonar.login=$SONAR_TOKEN
+            "
+            '''
         }
     }
 }
