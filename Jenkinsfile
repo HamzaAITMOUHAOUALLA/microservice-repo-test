@@ -1,6 +1,6 @@
 pipeline {
 
-    agent { label 'master' }
+    agent any
 
     environment {
 
@@ -8,6 +8,19 @@ pipeline {
     }
 
     stages {
+        stage('Debug Agent') {
+    steps {
+        sh '''
+        echo "Agent:"
+        hostname
+
+        echo "Docker path:"
+        which docker || echo "Docker not found"
+        '''
+    }
+}
+
+
 
         stage('Validate Branch') {
             steps {
