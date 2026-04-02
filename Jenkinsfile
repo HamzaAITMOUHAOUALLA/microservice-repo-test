@@ -115,6 +115,7 @@ stage('SonarQube Analysis') {
         }
             }
         }
+            }
         stage('Quality Gate') {
     steps {
         script {
