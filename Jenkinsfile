@@ -1,6 +1,6 @@
 pipeline {
 
-    agent any
+    agent agent { label 'jenkins-with-docker' }
 
     environment {
 
