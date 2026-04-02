@@ -42,7 +42,7 @@ pipeline {
         }
      }
     }
-    
+
         stage('Verify Variables') {
             steps {
                 sh '''
@@ -75,6 +75,7 @@ pipeline {
 
       
         stage('Build with Docker') {
+            agent { label 'agent-1' }
             steps {
                 sh '''
                 docker --version
