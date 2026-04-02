@@ -1,6 +1,6 @@
 pipeline {
 
-    agent { label 'controller' }
+    agent any
 
     environment {
 
