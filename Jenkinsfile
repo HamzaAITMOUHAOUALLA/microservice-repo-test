@@ -1,6 +1,6 @@
 pipeline {
 
-    agent { label 'Contrôleur' }
+    agent { label 'Jenkins' }
 
     environment {
 
