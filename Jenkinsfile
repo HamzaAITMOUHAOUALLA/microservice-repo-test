@@ -78,19 +78,12 @@ stage('Verify Tools') {
         '''
     }
 }
-stage('Install Maven') {
-    steps {
-        sh '''
-        apt-get update
-        apt-get install -y maven
-        mvn -version
-        '''
-    }
-}
+
 
             stage('Debug Docker Mount') {
     steps {
         sh '''
+        docker ps
         echo "WORKSPACE=$WORKSPACE"
         docker run --rm -v $WORKSPACE:/app alpine ls -la /app
         '''
