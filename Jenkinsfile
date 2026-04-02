@@ -64,11 +64,35 @@ stage('Load Pipeline Config') {
             }
         }
 
-
 stage('Build with Docker') {
     agent { label 'agent-1' }
     steps {
         sh '''
+        docker --version
+        '''
+    }
+}
+stage('Build with Docker') {
+    agent { label 'agent-2' }
+    steps {
+        sh '''
+        docker --version
+        '''
+    }
+}
+stage('Build with Docker') {
+    agent { label 'agent-3' }
+    steps {
+        sh '''
+        docker --version
+        '''
+    }
+}
+stage('Build with Docker') {
+    agent { label 'agent-1' }
+    steps {
+        sh '''
+        docker --version
         tar -czf - . | docker run --rm -i \
         --dns 8.8.8.8 \
         --dns 1.1.1.1 \
