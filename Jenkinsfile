@@ -1,6 +1,6 @@
 pipeline {
 
-    agent { label 'jenkins-master' }
+    agent { label 'Jenkins' }
 
     environment {
 
