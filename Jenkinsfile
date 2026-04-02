@@ -64,19 +64,19 @@ stage('Load Pipeline Config') {
             }
         }
 
-stage('Build with Docker') {
+stage('Build with Docker1') {
     agent { label 'agent-1' }
     steps {
         sh 'docker --version'
     }
 }
-stage('Build with Docker') {
+stage('Build with Docker2') {
     agent { label 'agent-2' }
     steps {
         sh 'docker --version'
     }
 }
-stage('Build with Docker') {
+stage('Build with Docker3') {
     agent { label 'agent-3' }
     steps {
         sh 'docker --version'
