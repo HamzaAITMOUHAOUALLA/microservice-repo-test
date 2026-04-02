@@ -104,7 +104,12 @@ pipeline {
             }
         }
 
-         stage('SonarQube Analysis') {
+stage('SonarQube Analysis') {
+    agent {
+        docker {
+            image 'maven:3.9.6-eclipse-temurin-17'
+        }
+    }
     steps {
         withSonarQubeEnv('SonarQubeServer') {
             withCredentials([
