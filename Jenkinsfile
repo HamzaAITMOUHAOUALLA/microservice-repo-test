@@ -13,15 +13,14 @@ pipeline {
                 checkout scm
             }
         }
-  stage('Debug Agent') {
+   stage('Debug Agent') {
     steps {
         sh '''
         echo "Node name: $NODE_NAME"
         echo "Labels: $NODE_LABELS"
         '''
     }
-}
-
+    }
 
 
         stage('Validate Branch') {
@@ -38,7 +37,7 @@ pipeline {
             }
         }
 
-stage('Load Pipeline Config') {
+    stage('Load Pipeline Config') {
     steps {
         script {
             def props = readProperties file: 'config/pipeline.env'
@@ -51,7 +50,7 @@ stage('Load Pipeline Config') {
             echo "Pipeline configuration loaded"
         }
     }
-}
+    }
 
         stage('Verify Variables') {
             steps {
@@ -64,41 +63,48 @@ stage('Load Pipeline Config') {
             }
         }
 
-stage('Build with Docker1') {
+    stage('Build with Docker1') {
     agent { label 'agent-1' }
     steps {
         sh 'docker --version'
     }
-}
-stage('Build with Docker2') {
+    }
+    stage('Build with Docker2') {
     agent { label 'agent-2' }
     steps {
         sh 'docker --version'
     }
-}
-stage('Build with Docker3') {
+    }
+    stage('Build with Docker3') {
     agent { label 'agent-3' }
     steps {
         sh 'docker --version'
     }
-}
-
-stage('Build with Docker') {
-    agent { label 'agent-1' }
-    steps {
-        sh '''
-        docker --version
-        tar -czf - . | docker run --rm -i \
-        --dns 8.8.8.8 \
-        --dns 1.1.1.1 \
-        maven:3.9.6-eclipse-temurin-17 bash -c "
-        mkdir /app && tar -xzf - -C /app && cd /app && mvn clean package -DskipTests
-        "
-        '''
     }
-}
 
-
+      stage('Build') {
+            agent {
+                docker {
+                    image 'maven:3.9.6-eclipse-temurin-17'
+                }
+            }
+            steps {
+                sh 'mvn clean package -DskipTests '
+            }
+        }
+        stage('Build with Docker') {
+            steps {
+                sh '''
+                docker --version
+                tar -czf - . | docker run --rm -i \
+                --dns 8.8.8.8 \
+                --dns 1.1.1.1 \
+                maven:3.9.6-eclipse-temurin-17 bash -c "
+                mkdir /app && tar -xzf - -C /app && cd /app && mvn clean package -DskipTests
+                "
+                '''
+            }
+        }
 
 
         stage('Unit Test & Quality Checks') {
