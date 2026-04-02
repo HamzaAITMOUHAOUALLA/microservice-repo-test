@@ -8,6 +8,11 @@ pipeline {
     }
 
     stages {
+         stage('Checkout Source') {
+            steps {
+                checkout scm
+            }
+        }
   stage('Debug Agent') {
     steps {
         sh '''
