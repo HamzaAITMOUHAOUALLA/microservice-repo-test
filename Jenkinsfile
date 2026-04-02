@@ -67,14 +67,13 @@ stage('Load Pipeline Config') {
 
 stage('Build with Docker') {
     agent { label 'agent-1' }
-
     steps {
         sh '''
-        docker run --rm \
-        -v $(pwd):/app \
-        -w /app \
-        maven:3.9.6-eclipse-temurin-17 \
-        mvn clean package -DskipTests
+        tar -czf app.tar.gz .
+        
+        docker run --rm -i maven:3.9.6-eclipse-temurin-17 bash -c "
+        mkdir /app && tar -xzf - -C /app && cd /app && mvn clean package -DskipTests
+        " < app.tar.gz
         '''
     }
 }
