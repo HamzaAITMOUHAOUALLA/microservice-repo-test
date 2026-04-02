@@ -92,14 +92,13 @@ stage('Verify Tools') {
     steps {
         sh '''
         docker run --rm \
-        -v $WORKSPACE:/app \
+        -v $(pwd):/app \
         -w /app \
         maven:3.9.6-eclipse-temurin-17 \
-        mvn clean package -DskipTests -e -X
+        mvn clean package -DskipTests
         '''
     }
 }
-
 
         stage('Unit Test & Quality Checks') {
 
