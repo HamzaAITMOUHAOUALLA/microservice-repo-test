@@ -91,6 +91,12 @@ stage('Verify Tools') {
  stage('Build') {
     steps {
         sh '''
+        
+echo "HOST:"
+ls -la /home/jenkins/agent/workspace/Hamza_microservice-repo-test_dev
+
+echo "PWD:"
+ls -la $(pwd)
         docker run --rm \
         -v $(pwd):/app \
         -w /app \
