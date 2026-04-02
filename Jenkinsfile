@@ -110,16 +110,31 @@ stage('SonarQube Analysis') {
             string(credentialsId: 'jenkinstoken', variable: 'SONAR_TOKEN')
         ]) {
             sh '''
+            set -euxo pipefail
+
+            echo "=== Starting SonarQube Analysis ==="
+
             tar -czf - . | docker run --rm -i \
-            --dns 8.8.8.8 \
-            --dns 1.1.1.1 \
-            maven:3.9.6-eclipse-temurin-17 bash -c "
-            mkdir /app && tar -xzf - -C /app && cd /app && \
-            mvn sonar:sonar \
-              -Dsonar.projectKey=data-demo-api \
-              -Dsonar.host.url=http://SONAR_URL:9000 \
-              -Dsonar.login=$SONAR_TOKEN
-            "
+              --dns 8.8.8.8 \
+              --dns 1.1.1.1 \
+              -e SONAR_TOKEN=$SONAR_TOKEN \
+              maven:3.9.6-eclipse-temurin-17 bash -c "
+                set -euxo pipefail
+
+                echo 'Inside container'
+                mkdir /app
+                tar -xzf - -C /app
+                cd /app
+
+                echo 'Running Maven SonarQube...'
+
+                mvn -X sonar:sonar \
+                  -Dsonar.projectKey=data-demo-api \
+                  -Dsonar.host.url=http://SONAR_URL:9000 \
+                  -Dsonar.login=\$SONAR_TOKEN
+              "
+
+            echo "=== SonarQube Analysis Finished ==="
             '''
         }
     }
