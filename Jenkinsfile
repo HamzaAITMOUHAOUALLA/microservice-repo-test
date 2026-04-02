@@ -78,6 +78,16 @@ stage('Verify Tools') {
         '''
     }
 }
+
+            stage('Debug Docker Mount') {
+    steps {
+        sh '''
+        echo "WORKSPACE=$WORKSPACE"
+        docker run --rm -v $WORKSPACE:/app alpine ls -la /app
+        '''
+    }
+}
+
  stage('Build') {
     steps {
         sh '''
