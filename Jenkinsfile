@@ -8,14 +8,11 @@ pipeline {
     }
 
     stages {
-        stage('Debug Agent') {
+  stage('Debug Agent') {
     steps {
         sh '''
-        echo "Agent:"
-        hostname
-
-        echo "Docker path:"
-        which docker || echo "Docker not found"
+        echo "Node name: $NODE_NAME"
+        echo "Labels: $NODE_LABELS"
         '''
     }
 }
