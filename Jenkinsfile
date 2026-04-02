@@ -1,6 +1,6 @@
 pipeline {
 
-    agent { label 'agent-1' }
+    agent any 
 
     environment {
 
@@ -65,7 +65,19 @@ stage('Load Pipeline Config') {
         }
 
 
+stage('Build with Docker') {
+    agent { label 'agent-1' }
 
+    steps {
+        sh '''
+        docker run --rm \
+        -v $(pwd):/app \
+        -w /app \
+        maven:3.9.6-eclipse-temurin-17 \
+        mvn clean package -DskipTests
+        '''
+    }
+}
 
 stage('Verify Tools') {
     steps {
