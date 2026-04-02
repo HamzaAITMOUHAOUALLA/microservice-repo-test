@@ -59,52 +59,34 @@ stage('Verify Tools') {
 
         docker --version || { echo "❌ Docker not working"; exit 1; }
 
-        echo "🔍 Checking Maven..."
-        if command -v mvn >/dev/null 2>&1; then
-          mvn -v || { echo "❌ Maven not working"; exit 1; }
-        elif [ -f mvnw ]; then
-          chmod +x mvnw
-          ./mvnw -v || { echo "❌ Maven wrapper not working"; exit 1; }
-        else
-          echo "❌ Maven not found"
-          exit 1
-        fi
-
-        echo "✅ All tools are available"
+    
         '''
     }
 }
-          stage('Build') {
+         stage('Build') {
+            agent {
+                docker {
+                    image 'maven:3.9.6-eclipse-temurin-17'
+                }
+            }
             steps {
-                sh '''
-                if [ -f mvnw ]; then
-                  chmod +x mvnw
-                  ./mvnw clean package -DskipTests
-                else
-                  mvn clean package -DskipTests
-                fi
-                '''
+                sh 'mvn clean package -DskipTests'
             }
         }
 
         stage('Unit Test & Quality Checks') {
 
             parallel {
-                stage('Unit Tests') {
-                    /*
-                    steps {
-                        sh '''
-                        if [ -f mvnw ]; then
-                          ./mvnw test
-                        else
-                          mvn test
-                        fi
-                        '''
-                    }*/
-                    steps {
-                        sh 'echo "unit tests"'
-                    }
+               stage('Unit Tests') {
+            agent {
+                docker {
+                    image 'maven:3.9.6-eclipse-temurin-17'
                 }
+            }
+            steps {
+                sh 'mvn test'
+            }
+        }
 
          stage('SonarQube Analysis') {
     steps {
