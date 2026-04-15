@@ -81,9 +81,7 @@ pipeline {
                 }
 
                 stage('SonarQube Analysis') {
-                    
-                    
-                    steps {
+                      steps {
                         withSonarQubeEnv('SonarQubeServer') {
                             withCredentials([
                                 string(
@@ -190,3 +188,4 @@ pipeline {
             sh 'docker logout || true'
         }
     }
+}
