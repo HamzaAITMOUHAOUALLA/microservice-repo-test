@@ -87,7 +87,7 @@ pipeline {
                         withSonarQubeEnv('SonarQubeServer') {
                             withCredentials([
                                 string(
-                                    credentialsId: 'jenkinstoken',
+                                    credentialsId: 'jenkins-token',
                                     variable: 'SONAR_TOKEN'
                                 )
                             ]) {
@@ -98,14 +98,8 @@ pipeline {
                         }
                     }
                     
-                    steps {
-                    
-                    /*steps {
-                        sh 'echo "sonarqube analysis"'
-                    }
-                    }*/
-                }
             }
+        }
         }
 
         stage('Build Staging Image') {
